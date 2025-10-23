@@ -73,7 +73,7 @@ class AI_Agent:
         # return final + (start - final)* math.exp(-1*epoch/decay)
         if epoch > decay:
             return final
-        return  start + final - epoch/decay
+        return  start - (start - final) * epoch/decay
 
     def __call__(self, events= None, state=None):
         return self.get_action(state)
