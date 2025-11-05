@@ -30,11 +30,10 @@ class AI_Agent:
         best_action = None
         for action in actions:
             key = (state, action)
-            Q_value = self.Q.get((state, action),0)
-            # if key in self.Q:
-            #     Q_value = self.Q[(state, action)]
-            # else:
-            #     Q_value = 0
+            if key in self.Q:
+                Q_value = self.Q[(state, action)]
+            else:
+                Q_value = 0
             if Q_value > best_value:
                 best_value = Q_value
                 best_action = action
@@ -67,16 +66,14 @@ class AI_Agent:
     def save_Q (self, PATH):
         torch.save(self.Q, PATH)
 
-    def epsilon_greedy (self, epoch)-> float:
+    def epsilon_greedy (self, epoch):
         start = 1.0
         final = 0.01
-        decay = 10000
-        
-        '''
-        עליכם לממש את הפונקציה אפסילון גרידי.
-        ניתן לממש כפונקציה לינארית או מעריכית, לבחירתכם.
-        
-        '''
+        decay = 75000
+        # return final + (start - final)* math.exp(-1*epoch/decay)
+        if epoch > decay:
+            return final
+        return  start - (start - final) * epoch/decay
 
     def __call__(self, events= None, state=None):
         return self.get_action(state)
